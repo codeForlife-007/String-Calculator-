@@ -29,4 +29,10 @@ public class StringCalculatorTest {
 		int result = StringCalculator.add("150,50,50,50");
 		assertEquals(300, result);
 	}
+	
+	@Test 
+	public void lowerCaseCharacterInInputString() {
+		int result = StringCalculator.add("12,a,12,12,z");
+		assertEquals(63, result);
+	}
 }
