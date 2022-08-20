@@ -9,6 +9,12 @@ public class StringCalculatorTest {
 	@Test
 	public void testNumberEmptyString(){
 		int result = StringCalculator.add("");
-		assertEquals(0, result);
+		assertEquals(0, result);	
+	}
+	
+	@Test 
+	public void testStringWithOneNumber() {
+		int result = StringCalculator.add("143");
+		assertEquals(143, result);
 	}
 }
