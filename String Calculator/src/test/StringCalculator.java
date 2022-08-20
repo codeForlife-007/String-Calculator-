@@ -6,30 +6,40 @@ import java.util.List;
 public class StringCalculator {
 
 	public static int add(String numbers) throws StringCalculatorException {
+		int result;
 		if (numbers.isEmpty()) {
-			return 0;
+			result = 0;
 		} else if (!numbers.contains(",")) {
-			return handleCaseForOneNumber(numbers);
+			result = getOneConsolidatedNumber(numbers);
 		} else {
-			return handleCaseForMoreThanOneNumber(numbers);
+			result = getTotalSumSeparatedByDelimiter(numbers);
 		}
+		return result;
 	}
 
-	private static int handleCaseForOneNumber(String numbers) throws StringCalculatorException {
+	private static int getOneConsolidatedNumber(String numbers) throws StringCalculatorException {
 		int number = Integer.parseInt(numbers);
-		if (isNegativeNumber(number)) {
+		if (StringCalculatorUtil.isNegativeNumber(number)) {
 			List<Integer> negativeNumbers = new ArrayList<>();
 			negativeNumbers.add(number);
-			String errorMessage = generateExceptionMessageForNegativeNumbers(negativeNumbers);
+			String errorMessage = StringCalculatorUtil.generateExceptionMessageForNegativeNumbers(negativeNumbers);
 			throw new StringCalculatorException(errorMessage);
 		}
 		return number;
 	}
 
-	private static int handleCaseForMoreThanOneNumber(String numbers) throws StringCalculatorException {
+	private static int getTotalSumSeparatedByDelimiter(String numbers) throws StringCalculatorException {
 		String[] numbersList = numbers.split(",");
+		List<Integer> negativeNumbers = getNegativeNumbers(numbersList);
+		if (!negativeNumbers.isEmpty()) {
+			String errorMessage = StringCalculatorUtil.generateExceptionMessageForNegativeNumbers(negativeNumbers);
+			throw new StringCalculatorException(errorMessage);
+		}
+		return getTotalSum(numbersList);
+	}
+
+	private static int getTotalSum(String[] numbersList) {
 		int sum = 0;
-		List<Integer> negativeNumbers = new ArrayList<>();
 		for (int index = 0; index < numbersList.length; index++) {
 			if (numbersList[index].length() == 1) {
 				char character = numbersList[index].charAt(0);
@@ -39,37 +49,24 @@ public class StringCalculator {
 				}
 			}
 			int number = Integer.parseInt(numbersList[index]);
-			if (isNumberMoreThanThousand(number)) {
-				continue;
-			}
-			if (isNegativeNumber(number)) {
-				negativeNumbers.add(number);
+			if (StringCalculatorUtil.isNumberMoreThanThousand(number)) {
 				continue;
 			}
 			sum += number;
 		}
-		if (!negativeNumbers.isEmpty()) {
-			String errorMessage = generateExceptionMessageForNegativeNumbers(negativeNumbers);
-			throw new StringCalculatorException(errorMessage);
-		}
 		return sum;
 	}
-
-	private static boolean isNegativeNumber(int number) {
-		return number < 0;
-	}
-
-	private static boolean isNumberMoreThanThousand(int number) {
-		return number > 1000;
-	}
-
-	private static String generateExceptionMessageForNegativeNumbers(List<Integer> negativeNumbers) {
-		StringBuilder statusMessage = new StringBuilder();
-		statusMessage.append("Negatives not Allowed -: ");
-		for (Integer negativeNumber : negativeNumbers) {
-			statusMessage.append(negativeNumber);
-			statusMessage.append(",");
+	
+	private static List<Integer> getNegativeNumbers(String[] numbers) {
+		List<Integer> negativeNumbers = new ArrayList<>();
+		for (int i = 0; i < numbers.length; i++) {
+			if(StringCalculatorUtil.isNumber(numbers[i])) { 
+				int number = Integer.parseInt(numbers[i]);
+				if(StringCalculatorUtil.isNegativeNumber(number)) {
+					negativeNumbers.add(number);
+				}
+			}
 		}
-		return statusMessage.toString().substring(0, statusMessage.length() - 1);
+		return negativeNumbers;
 	}
 }
