@@ -32,12 +32,17 @@ public class StringCalculatorTest {
 	
 	@Test 
 	public void testLowerCaseCharacterInInputString() throws StringCalculatorException {
-		int result = StringCalculator.add("12,a,12,12,z");
-		assertEquals(63, result);
+		int result = StringCalculator.add("12,a,1,12,z");
+		assertEquals(52, result);
 	}
 	
 	@Test(expected = StringCalculatorException.class) 
-	public void testOneNumberNegativeException() throws StringCalculatorException {
+	public void testOneNegativeNumberException() throws StringCalculatorException {
 		int result = StringCalculator.add("-12");
+	}
+	
+	@Test(expected = StringCalculatorException.class) 
+	public void testMultipleNegativeNumbersException() throws StringCalculatorException {
+		int result = StringCalculator.add("-12,65,-13,21,-76,");
 	}
 }
