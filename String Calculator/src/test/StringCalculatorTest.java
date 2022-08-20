@@ -1,6 +1,6 @@
 package test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
@@ -36,13 +36,29 @@ public class StringCalculatorTest {
 		assertEquals(52, result);
 	}
 	
-	@Test(expected = StringCalculatorException.class) 
+    @Test
 	public void testOneNegativeNumberException() throws StringCalculatorException {
-		int result = StringCalculator.add("-12");
+		try {			
+			int result = StringCalculator.add("-12");
+		} catch (StringCalculatorException e) {
+			String errorMessage = "Negatives not Allowed -: -12";
+			assertEquals(errorMessage, e.getMessage());
+		};
 	}
 	
-	@Test(expected = StringCalculatorException.class) 
+	@Test 
 	public void testMultipleNegativeNumbersException() throws StringCalculatorException {
-		int result = StringCalculator.add("-12,65,-13,21,-76,");
+		try {			
+			int result = StringCalculator.add("-12,65,-13,21,-76,");
+		} catch (StringCalculatorException e) {
+			String errorMessage = "Negatives not Allowed -: -12,-13,-76";
+			assertEquals(errorMessage, e.getMessage());
+		};
+	}
+	
+	@Test 
+	public void testNumbersMoreThanThousand() throws StringCalculatorException {
+		int result = StringCalculator.add("1001,201,103,1005");
+		assertEquals(304, result);
 	}
 }
