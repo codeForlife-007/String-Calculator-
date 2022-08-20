@@ -2,16 +2,23 @@ package test;
 
 public class StringCalculator {
 	
-	public static int add(String numbers) {
-		if (numbers.isEmpty()) {
-			return 0;
-		} 
-		else if (!numbers.contains(",")) {
-			return Integer.parseInt(numbers);
-		} 
-		else {
-			return getSum(numbers);
-		}
+	public static int add(String numbers) throws StringCalculatorException {
+			if (numbers.isEmpty()) {
+				return 0;
+			} 
+			else if (!numbers.contains(",")) {
+				int number = Integer.parseInt(numbers);
+				if(isNegativeNumber(number)) {
+					StringBuilder statusMessage = new StringBuilder();
+					statusMessage.append("Negatives not Allowed -");
+					statusMessage.append(number);
+					throw new StringCalculatorException(statusMessage.toString());
+				}
+				return number;
+			} 
+			else {
+				return getSum(numbers);
+			}
 	}
 
 	private static int getSum(String numbers) {
@@ -29,4 +36,9 @@ public class StringCalculator {
 		}
 		return sum;
 	}
+	
+	public static boolean isNegativeNumber(int number) {
+		return number < 0;
+	}
+
 }
