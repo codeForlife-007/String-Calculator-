@@ -9,6 +9,13 @@ public class StringCalculator {
 		else if (!numbers.contains(",")) {
 			return Integer.parseInt(numbers);
 		} 
-		return -1;
+		else {
+			String[] numbersList = numbers.split(",");
+			int sum = 0;
+			for (int index = 0; index < numbersList.length; index++) {
+				sum += Integer.parseInt(numbersList[index]);
+			}
+			return sum;
+		}
 	}
 }
