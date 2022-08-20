@@ -11,7 +11,7 @@ public class StringCalculator {
 		} else if (!numbers.contains(",")) {
 			return handleCaseForOneNumber(numbers);
 		} else {
-			return getTotalSum(numbers);
+			return handleCaseForMoreThanOneNumber(numbers);
 		}
 	}
 
@@ -26,7 +26,7 @@ public class StringCalculator {
 		return number;
 	}
 
-	private static int getTotalSum(String numbers) throws StringCalculatorException {
+	private static int handleCaseForMoreThanOneNumber(String numbers) throws StringCalculatorException {
 		String[] numbersList = numbers.split(",");
 		int sum = 0;
 		List<Integer> negativeNumbers = new ArrayList<>();
