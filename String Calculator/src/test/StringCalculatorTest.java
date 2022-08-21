@@ -36,7 +36,7 @@ public class StringCalculatorTest {
 		assertEquals(52, result);
 	}
 	
-    @Test
+	@Test
 	public void testOneNegativeNumberException() throws StringCalculatorException {
 		try {			
 			int result = StringCalculator.add("-12");
@@ -60,5 +60,17 @@ public class StringCalculatorTest {
 	public void testNumbersMoreThanThousand() throws StringCalculatorException {
 		int result = StringCalculator.add("1001,201,103,1005");
 		assertEquals(304, result);
+	}
+	
+	@Test
+	public void testToHandleNewLinesBetweenNumbers() throws StringCalculatorException {
+		int result = StringCalculator.add("1\n2,3,4\n5");
+		assertEquals(15, result);
+	}
+	
+	@Test 
+	public void testToSupportDifferentDelimiters() throws StringCalculatorException {
+		int result = StringCalculator.add("//;\n1;2;3");
+		assertEquals(6, result);
 	}
 }

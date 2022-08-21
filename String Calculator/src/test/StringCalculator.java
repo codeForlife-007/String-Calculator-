@@ -2,6 +2,8 @@ package test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StringCalculator {
 
@@ -9,10 +11,12 @@ public class StringCalculator {
 		int result;
 		if (numbers.isEmpty()) {
 			result = 0;
-		} else if (!numbers.contains(",")) {
-			result = getOneConsolidatedNumber(numbers);
+		}  else if (numbers.startsWith("//")) {
+			result = getTotalSumSeparatedByUserEnteredDelimiter(numbers);
+		} else if (numbers.contains(",") || numbers.contains("\n")) {
+			result = getTotalSumSeparatedByDefaultDelimiter(numbers);
 		} else {
-			result = getTotalSumSeparatedByDelimiter(numbers);
+			result = getOneConsolidatedNumber(numbers);
 		}
 		return result;
 	}
@@ -27,14 +31,24 @@ public class StringCalculator {
 		}
 		return number;
 	}
-
-	private static int getTotalSumSeparatedByDelimiter(String numbers) throws StringCalculatorException {
-		String[] numbersList = numbers.split(",");
+	
+	private static int getTotalSumSeparatedByDefaultDelimiter(String numbers) throws StringCalculatorException {
+		return getTotalSumSeparatedByDelimiter(numbers, ",|\n");
+	}
+	
+	private static int getTotalSumSeparatedByUserEnteredDelimiter(String numbers) throws StringCalculatorException {
+		Matcher matcher = Pattern.compile("//(.*)\n(.*)").matcher(numbers);
+		matcher.find();
+		return getTotalSumSeparatedByDelimiter(matcher.group(2), matcher.group(1));
+	}
+	
+	private static int getTotalSumSeparatedByDelimiter(String numbers, String delimiter) throws StringCalculatorException {
+		String[] numbersList = numbers.split(delimiter);
 		List<Integer> negativeNumbers = getNegativeNumbers(numbersList);
 		if (!negativeNumbers.isEmpty()) {
 			String errorMessage = StringCalculatorUtil.generateExceptionMessageForNegativeNumbers(negativeNumbers);
 			throw new StringCalculatorException(errorMessage);
-		}
+		}			
 		return getTotalSum(numbersList);
 	}
 
@@ -59,9 +73,9 @@ public class StringCalculator {
 	
 	private static List<Integer> getNegativeNumbers(String[] numbers) {
 		List<Integer> negativeNumbers = new ArrayList<>();
-		for (int i = 0; i < numbers.length; i++) {
-			if(StringCalculatorUtil.isNumber(numbers[i])) { 
-				int number = Integer.parseInt(numbers[i]);
+		for (int index = 0; index < numbers.length; index++) {
+			if(StringCalculatorUtil.isNumber(numbers[index])) { 
+				int number = Integer.parseInt(numbers[index]);
 				if(StringCalculatorUtil.isNegativeNumber(number)) {
 					negativeNumbers.add(number);
 				}

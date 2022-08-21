@@ -24,7 +24,7 @@ public class StringCalculatorUtil {
 	public static String generateExceptionMessageForNegativeNumbers(List<Integer> negativeNumbers) {
 		StringBuilder statusMessage = new StringBuilder();
 		statusMessage.append("Negatives not Allowed -: ");
-		for (Integer negativeNumber : negativeNumbers) {
+		for (int negativeNumber : negativeNumbers) {
 			statusMessage.append(negativeNumber);
 			statusMessage.append(",");
 		}
